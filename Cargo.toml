@@ -7,9 +7,9 @@ edition = "2018"
 [lib]
 name = "shielder_js"
 path = "src/lib.rs"
-crate-type = ["rlib"]
+crate-type = ["cdylib", "rlib"]
 
 [workspace]
 members = [
-    "packages/shielder.js-core/shielder-zk"
+    "packages/shielder.js-core/"
 ]
