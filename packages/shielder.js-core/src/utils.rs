@@ -1,21 +1,16 @@
-use serde::{Deserialize, Serialize};
-use serde_json;
-use utils::*;
-use wasm_bindgen::prelude::*;
-use ark_serialize::CanonicalDeserialize;
-use js_sys::Uint8Array;
 use js_sys::Object;
-use liminal_ark_relations::environment::{Groth16, ProvingSystem};
-use liminal_ark_relations::serialization::serialize;
-use liminal_ark_relations::shielder::types::{FrontendNullifier, FrontendTrapdoor};
-use liminal_ark_relations::shielder::{compute_note, DepositRelationWithFullInput};
-use rand::Rng;
+use js_sys::Uint8Array;
+use serde::{Deserialize, Serialize};
+
 use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{console, ReadableStreamDefaultReader, Request, RequestInit, RequestMode, Response};
-pub const DEPOSIT_PK_URL: String = "https://bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u.ipfs.w3s.link/ipfs/bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u/deposit.pk.bytes".to_string();
+use web_sys::{ReadableStreamDefaultReader, Request, RequestInit, RequestMode, Response};
 
+pub const DEPOSIT_PK_URL: &str = "https://bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u.ipfs.w3s.link/ipfs/bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u/deposit.pk.bytes";
+pub const WITHDRAW_PK_URL: &str = "https://bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u.ipfs.w3s.link/ipfs/bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u/deposit.pk.bytes";
+pub const MERKLE_PATH_MAX_LEN: u8 = 16;
+//pub conts MERKLE_PATH_MAX_LEN: u8 = 16;
 pub fn set_panic_hook() {
     // When the `console_error_panic_hook` feature is enabled, we can call the
     // `set_panic_hook` function at least once during initialization, and then
@@ -54,4 +49,25 @@ pub async fn fetch_pk_bytes(url: String) -> Vec<u8> {
     let chunk = chunk_array.to_vec();
 
     return chunk;
+}
+#[derive(Serialize, Deserialize)]
+pub struct Deposit {
+    pub deposit_id: u16,
+    pub token_id: u16,
+    pub token_amount: u128,
+    pub leaf_idx: u32,
+    pub trapdoor: [u64; 4],
+    pub nullifier: [u64; 4],
+    pub note: [u64; 4],
+    pub proof: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Withdraw {
+    pub deposit: Deposit,
+    pub withdraw_amount: u128,
+    pub recipient: [u8; 32],
+    pub fee: u128,
+    pub merkle_root: [u64; 4],
+    pub merkle_path: Vec<[u64; 4]>,
 }
