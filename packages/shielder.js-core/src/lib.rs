@@ -20,6 +20,11 @@ use web_sys::console;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
+pub fn bar() -> String {
+    return "OK".to_string();
+}
+
+#[wasm_bindgen]
 pub async fn deposit(deposit_data_string: String) -> String {
     console::log_1(&"START".into());
     let pk_bytes: Vec<u8> = fetch_pk_bytes(DEPOSIT_PK_URL.to_string()).await;
