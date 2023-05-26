@@ -1,9 +1,6 @@
-import { greet } from '../src/main'
+import {  bar } from '../src/main'
 
-test('the data is peanut butter', () => {
-  expect(1).toBe(1)
-});
-
-test('greeting', () => {
-  expect(greet('Foo')).toBe('Hello Foo')
-});
+test('bar', async () => {
+  const res = bar();
+  console.log(res);
+})
