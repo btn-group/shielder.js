@@ -1,0 +1,15 @@
+[package]
+name = "shielder_js"
+version = "0.1.0"
+authors = ["jsk28 <jsk28@sussex.ac.uk>"]
+edition = "2018"
+
+[lib]
+name = "shielder_js"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[workspace]
+members = [
+    "packages/shielder.js-core/shielder-zk"
+]

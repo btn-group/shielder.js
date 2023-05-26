@@ -1,3 +1,10 @@
 
 .nx/installation
 .nx/cache
+
+/target
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
