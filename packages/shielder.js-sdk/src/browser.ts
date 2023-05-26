@@ -1,10 +1,25 @@
-/**
- * This file is the entrypoint of browser builds.
- * The code executes when loaded in a browser.
- */
-import { foo } from './main'
+import init, { json_test_string} from 'shielder-zk';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(window as any).foo = foo  // instead of casting window to any, you can extend the Window interface: https://stackoverflow.com/a/43513740/5433572
+async function initWasm() {
+  await init();
+}
 
-console.log('Method "foo" was added to the window object. You can try it yourself by just entering "await foo()"')
+async function testMethod() {
+  const test = {
+    num: 10,
+    arr: [1,2,3,4],
+    my_vec: [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]],
+    test_json: {
+      num: 10,
+      word: 'test-typescript'
+    }
+  }
+
+  const result = json_test_string(JSON.stringify(test));
+  console.log(result);
+}
+
+export {
+  initWasm,
+  testMethod
+}

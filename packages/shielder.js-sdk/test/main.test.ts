@@ -1,4 +1,4 @@
-import {  bar } from '../src/main'
+import { bar } from '../src/main'
 
 test('bar', async () => {
   const res = bar();
