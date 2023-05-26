@@ -20,27 +20,34 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 pub async fn deposit(deposit_data_string: String) -> String {
     let pk_bytes: Vec<u8> = fetch_pk_bytes(DEPOSIT_PK_URL.to_string()).await;
-    let mut deposit_data: Deposit = serde_json::from_str(&deposit_data_string).unwrap();
+    let mut prepare_deposit_data: PrepareDeposit =
+        serde_json::from_str(&deposit_data_string).unwrap();
     let (trapdoor, nullifier) = rand::thread_rng().gen::<(FrontendTrapdoor, FrontendNullifier)>();
     let note = compute_note(
-        deposit_data.token_id,
-        deposit_data.token_amount,
+        prepare_deposit_data.token_id,
+        prepare_deposit_data.token_amount,
         trapdoor,
         nullifier,
     );
     let circuit = DepositRelationWithFullInput::new(
         note,
-        deposit_data.token_id,
-        deposit_data.token_amount,
+        prepare_deposit_data.token_id,
+        prepare_deposit_data.token_amount,
         trapdoor,
         nullifier,
     );
     let pk = <<Groth16 as ProvingSystem>::ProvingKey>::deserialize(&*pk_bytes).unwrap();
     let proof = "0x".to_string() + hex::encode(serialize(&Groth16::prove(&pk, circuit))).as_str();
-    deposit_data.trapdoor = trapdoor;
-    deposit_data.nullifier = nullifier;
-    deposit_data.note = note;
-    deposit_data.proof = proof;
+    let deposit_data = Deposit {
+        deposit_id: prepare_deposit_data.deposit_id,
+        token_id: prepare_deposit_data.token_id,
+        token_amount: prepare_deposit_data.token_amount,
+        leaf_idx: 0,
+        trapdoor,
+        nullifier,
+        note,
+        proof,
+    };
     return serde_json::to_string(&deposit_data).unwrap_or(String::from("ERROR_WASM"));
 }
 

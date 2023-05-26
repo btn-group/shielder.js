@@ -51,6 +51,12 @@ pub async fn fetch_pk_bytes(url: String) -> Vec<u8> {
     return chunk;
 }
 #[derive(Serialize, Deserialize)]
+pub struct PrepareDeposit {
+    pub deposit_id: u16,
+    pub token_id: u16,
+    pub token_amount: u128,
+}
+#[derive(Serialize, Deserialize)]
 pub struct Deposit {
     pub deposit_id: u16,
     pub token_id: u16,
