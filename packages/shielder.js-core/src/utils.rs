@@ -42,7 +42,6 @@ pub async fn _fetch_pk_bytes(url: String) -> Vec<u8> {
     let reader: ReadableStreamDefaultReader = reader_value.dyn_into().unwrap();
 
     let result_value = JsFuture::from(reader.read()).await.expect("errr");
-    
 
     let result: Object = result_value.dyn_into().unwrap();
     let chunk_value = js_sys::Reflect::get(&result, &JsValue::from_str("value")).unwrap();
@@ -80,6 +79,6 @@ pub struct Withdraw {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct PkBytes{
-    pub nested: Vec<u8>
+pub struct PkBytes {
+    pub nested: Vec<u8>,
 }

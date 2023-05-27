@@ -72,7 +72,7 @@ pub async fn deposit(deposit_data_string: String, pk_bytes_string: String) -> St
 pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> String {
     console::log_1(&"[CORE_DEBUG] START".into());
     let pk_bytes_lol: PkBytes = serde_json::from_str(&pk_bytes_string).unwrap();
-    let pk_bytes = pk_bytes_lol.nested;
+    let pk_bytes: Vec<u8> = pk_bytes_lol.nested;
     console::log_1(&format!("[CORE_DEBUG] PK_BYTES_LENGTH: {:?}", pk_bytes.len()).into());
 
     let withdraw_data: Withdraw = serde_json::from_str(&withdraw_data_string).unwrap();
@@ -90,7 +90,6 @@ pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> 
         new_nullifier,
     );
     console::log_1(&"[CORE_DEBUG] NEW NOTE COMPUTED".into());
-
 
     let circuit = WithdrawRelationWithFullInput::new(
         MERKLE_PATH_MAX_LEN,
@@ -122,6 +121,6 @@ pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> 
     deposit_data.token_amount = new_token_amount;
     deposit_data.note = new_note;
     console::log_1(&"[CORE_DEBUG] DEPOSIT DATA UPDATED".into());
-    
+
     return serde_json::to_string(&deposit_data).unwrap_or(String::from("ERROR_WASM"));
 }

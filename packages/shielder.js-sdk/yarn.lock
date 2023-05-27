@@ -2943,7 +2943,7 @@ shebang-regex@^3.0.0:
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-shielder-zk@^0.1.0:
+"shielder-zk@file:../shielder.js-core/pkg":
   version "0.1.0"
   resolved "file:../shielder.js-core/pkg"
 
