@@ -27,20 +27,10 @@ pub fn bar() -> String {
 }
 
 #[wasm_bindgen]
-pub fn foo() -> String {
-    let tmp = PkBytes {
-        nested: Vec::from([Vec::from([0,1]),Vec::from([2,3]),Vec::from([4,5])])
-    };
-    let json = serde_json::to_string(&tmp).unwrap_or(String::from("ERROR_WASM"));
-    console::log_1(&format!("PK_bytes_json: {:?}", json).into());
-    return json;
-}
-
-#[wasm_bindgen]
 pub async fn deposit(deposit_data_string: String, pk_bytes_string: String) -> String {
     console::log_1(&"START".into());
     let pk_bytes_lol: PkBytes = serde_json::from_str(&pk_bytes_string).unwrap();
-    let pk_bytes: Vec<u8> = pk_bytes_lol.nested.into_iter().flatten().collect();
+    let pk_bytes = pk_bytes_lol.nested;
     // let pk_bytes: Vec<u8> = fetch_pk_bytes(DEPOSIT_PK_URL.to_string()).await;
     console::log_1(&format!("PK_bytes: {:?}", pk_bytes).into());
     let prepare_deposit_data: PrepareDeposit = serde_json::from_str(&deposit_data_string).unwrap();
