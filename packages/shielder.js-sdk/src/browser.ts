@@ -26,7 +26,7 @@ async function readAllChunks(readableStream: any) {
 }
 
 async function deposit(args: Deposit) {
-  console.log('[DEBUG] DEPOSIT_WASM');
+  console.log('[SDK_DEBUG] START_DEPOSIT_SDK');
 
   const res = await fetch(SHIELDER_DEPOSIT_PK_BYTES_URL)
   const chunks = (await readAllChunks(res.body));
@@ -35,12 +35,12 @@ async function deposit(args: Deposit) {
     return [...acc, ...curr]
   })
 
-  console.log('[DEBUG] DEPOSIT_WASM_DATA:', JSON.stringify(args))
+  console.log('[SDK_DEBUG] DEPOSIT_SDK_DATA:', JSON.stringify(args))
   const depositWasmResult = await depositWasm(JSON.stringify(args), JSON.stringify({
     nested: flatten
   }));
   
-  console.log('[DEBUG] FINISH_DEPOSIT_WASM:', depositWasmResult);
+  console.log('[SDK_DEBUG] FINISH_DEPOSIT_SDK:', depositWasmResult);
 
   return depositWasmResult;
 }
