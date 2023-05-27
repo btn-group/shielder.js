@@ -73,7 +73,7 @@ pub struct Deposit {
 pub struct Withdraw {
     pub deposit: Deposit,
     pub withdraw_amount: u128,
-    pub recipient: [u8; 24],
+    pub recipient: [u8; 32],
     pub fee: u128,
     pub merkle_root: [u64; 4],
     pub merkle_path: Vec<[u64; 4]>,
