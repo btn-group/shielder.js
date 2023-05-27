@@ -1,7 +1,6 @@
 import init, {bar, 
   deposit as depositWasm, 
   // withdraw as withdrawWasm
-  run_prover
 } from 'shielder-zk';
 
 async function initWasm() {
@@ -104,5 +103,4 @@ export {
   // testMethod
   foo,
   deposit,
-  run_prover
 }
