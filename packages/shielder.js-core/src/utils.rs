@@ -1,7 +1,8 @@
+use std::convert::TryInto;
+
 use js_sys::Object;
 use js_sys::Uint8Array;
 use serde::{Deserialize, Serialize};
-
 use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::JsFuture;
@@ -56,7 +57,7 @@ pub struct PrepareDeposit {
     pub token_id: u16,
     pub token_amount: u128,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Deposit {
     pub deposit_id: u16,
     pub token_id: u16,
@@ -74,11 +75,44 @@ pub struct Withdraw {
     pub withdraw_amount: u128,
     pub recipient: [u8; 32],
     pub fee: u128,
-    pub merkle_root: [u64; 4],
-    pub merkle_path: Vec<[u64; 4]>,
+    // pub merkle_root: [u64; 4],
+    pub merkle_root: [String; 4],
+    // pub merkle_path: Vec<[u64; 4]>,
+    pub merkle_path: Vec<[String; 4]>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct PkBytes {
     pub nested: Vec<u8>,
+}
+
+impl Withdraw {
+    pub fn parse_merkle_root(&self) -> [u64; 4] {
+        let dupa: Vec<u64> = self
+            .merkle_root
+            .iter()
+            .map(|s| {
+                let no_prefix = s.trim_start_matches("0x");
+                u64::from_str_radix(no_prefix, 16).unwrap()
+            })
+            .collect();
+        return dupa.as_slice().try_into().unwrap();
+    }
+
+    pub fn parse_merkle_path(&self) -> Vec<[u64; 4]> {
+        // let dupa: Vec<[u64; 4]> = self
+        let dupa: Vec<[u64; 4]> = self
+            .merkle_path
+            .iter()
+            .map(|v| {
+                [
+                    u64::from_str_radix(v[0].trim_start_matches("0x"), 16).unwrap(),
+                    u64::from_str_radix(v[1].trim_start_matches("0x"), 16).unwrap(),
+                    u64::from_str_radix(v[2].trim_start_matches("0x"), 16).unwrap(),
+                    u64::from_str_radix(v[3].trim_start_matches("0x"), 16).unwrap(),
+                ]
+            })
+            .collect();
+        return dupa;
+    }
 }

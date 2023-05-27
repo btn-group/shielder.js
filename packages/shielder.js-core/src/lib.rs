@@ -76,13 +76,13 @@ pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> 
     console::log_1(&format!("[CORE_DEBUG] PK_BYTES_LENGTH: {:?}", pk_bytes.len()).into());
 
     let withdraw_data: Withdraw = serde_json::from_str(&withdraw_data_string).unwrap();
-    let mut deposit_data: Deposit = withdraw_data.deposit;
+    let mut deposit_data: Deposit = withdraw_data.deposit.clone();
 
     let (new_trapdoor, new_nullifier) =
         rand::thread_rng().gen::<(FrontendTrapdoor, FrontendNullifier)>();
     console::log_1(&"[CORE_DEBUG] TRAPDOOR AND NULLIFIER GENERATED".into());
 
-    let new_token_amount = deposit_data.token_amount - withdraw_data.withdraw_amount;
+    let new_token_amount = deposit_data.token_amount - &withdraw_data.withdraw_amount;
     let new_note = compute_note(
         deposit_data.token_id,
         new_token_amount,
@@ -99,11 +99,11 @@ pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> 
         deposit_data.nullifier,
         new_note,
         withdraw_data.withdraw_amount,
-        withdraw_data.merkle_root,
+        withdraw_data.parse_merkle_root(),
         deposit_data.trapdoor,
         new_trapdoor,
         new_nullifier,
-        withdraw_data.merkle_path,
+        withdraw_data.parse_merkle_path(),
         deposit_data.leaf_idx.into(),
         deposit_data.note,
         deposit_data.token_amount,
@@ -121,6 +121,6 @@ pub async fn withdraw(withdraw_data_string: String, pk_bytes_string: String) -> 
     deposit_data.token_amount = new_token_amount;
     deposit_data.note = new_note;
     console::log_1(&"[CORE_DEBUG] DEPOSIT DATA UPDATED".into());
-
+    
     return serde_json::to_string(&deposit_data).unwrap_or(String::from("ERROR_WASM"));
 }
