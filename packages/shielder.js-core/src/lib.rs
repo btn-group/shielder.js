@@ -27,10 +27,12 @@ pub fn bar() -> String {
 }
 
 #[wasm_bindgen]
-pub async fn deposit(deposit_data_string: String) -> String {
+pub async fn deposit(deposit_data_string: String, pk_bytes_string: String) -> String {
     console_error_panic_hook::set_once();
     console::log_1(&"START".into());
-    let pk_bytes: Vec<u8> = fetch_pk_bytes(DEPOSIT_PK_URL.to_string()).await;
+    let pk_bytes_lol: PkBytes = serde_json::from_str(&pk_bytes_string).unwrap();
+    let pk_bytes: Vec<u8> = pk_bytes_lol.nested.into_iter().flatten().collect();
+    // let pk_bytes: Vec<u8> = fetch_pk_bytes(DEPOSIT_PK_URL.to_string()).await;
     console::log_1(&format!("PK_bytes: {:?}", pk_bytes).into());
     let prepare_deposit_data: PrepareDeposit = serde_json::from_str(&deposit_data_string).unwrap();
     let (trapdoor, nullifier) = rand::thread_rng().gen::<(FrontendTrapdoor, FrontendNullifier)>();

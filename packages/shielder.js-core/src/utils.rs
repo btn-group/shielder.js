@@ -77,3 +77,8 @@ pub struct Withdraw {
     pub merkle_root: [u64; 4],
     pub merkle_path: Vec<[u64; 4]>,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct PkBytes{
+    pub nested: Vec<Vec<u8>>
+}
