@@ -1,9 +1,9 @@
 import init, {
   deposit as depositWasm,
-  // withdraw as withdrawWasm
+  withdraw as withdrawWasm
 } from 'shielder-zk';
-import { Deposit } from './interfaces';
-import { SHIELDER_DEPOSIT_PK_BYTES_URL } from './constants';
+import { Deposit, Withdraw } from './interfaces';
+import { SHIELDER_DEPOSIT_PK_BYTES_URL, SHIELDER_WITHDRAW_PK_BYTES_URL } from './constants';
 
 async function initWasm() {
   await init();
@@ -28,7 +28,7 @@ async function readAllChunks(readableStream: any) {
 async function deposit(args: Deposit) {
   console.log('[SDK_DEBUG] START_DEPOSIT_SDK');
 
-  const res = await fetch(SHIELDER_DEPOSIT_PK_BYTES_URL)
+  const res = await fetch(SHIELDER_DEPOSIT_PK_BYTES_URL);
   const chunks = (await readAllChunks(res.body));
 
   const flatten = chunks.reduce((acc, curr) => {
@@ -45,8 +45,30 @@ async function deposit(args: Deposit) {
   return depositWasmResult;
 }
 
+async function withdraw(args: Withdraw) {
+  console.log('[SDK_DEBUG] START_WITHDRAW_SDK');
+
+  const res = await fetch(SHIELDER_WITHDRAW_PK_BYTES_URL);
+  const chunks = (await readAllChunks(res.body));
+
+  const flatten = chunks.reduce((acc, curr) => {
+    return [...acc, ...curr]
+  });
+
+  console.log('[SDK_DEBUG] WITHDRAW_SDK_DATA:', JSON.stringify(args));
+  const withdrawWasmResult = await withdrawWasm(JSON.stringify(args), JSON.stringify({
+    nested: flatten
+  }));
+  
+  console.log('[SDK_DEBUG] FINISH_WITHDRAW_SDK:', withdrawWasmResult);
+
+  return withdrawWasmResult;
+}
+
 export {
   initWasm,
   deposit,
-  Deposit
+  withdraw,
+  Deposit,
+  Withdraw
 }

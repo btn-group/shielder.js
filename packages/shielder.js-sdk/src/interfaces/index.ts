@@ -7,3 +7,12 @@ export interface Deposit {
   note?: [number, number, number, number];
   proof?: string
 }
+
+export interface Withdraw {
+  deposit: Deposit,
+  withdraw_amount: number;
+  fee: number;
+  merkle_root: [number, number, number, number];
+  merkle_path: any;
+  recipient: any;
+}
