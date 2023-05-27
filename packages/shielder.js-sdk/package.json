@@ -26,7 +26,7 @@
     "esbuild-node": "esbuild src/cli.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/esbuild/cli.js --format=esm",
     "esbuild-node:dev": "esbuild src/cli.ts --bundle --platform=node --sourcemap=external --outfile=dist/esbuild/cli.js",
     "esbuild-node:watch": "esbuild src/cli.ts --bundle --platform=node --watch --sourcemap=external --outfile=dist/esbuild/cli.js",
-    "copy-wasm-file": "cp ../shielder.js-core/pkg/shielder_zk_bg.wasm ./dist/esbuild/"
+    "copy-wasm-file": "cp ./node_modules/shielder-zk/shielder_zk_bg.wasm ./dist/esbuild/"
   },
   "devDependencies": {
     "@types/jest": "^27.5.2",
@@ -36,7 +36,6 @@
     "esbuild": "^0.14.38",
     "eslint": "^8.14.0",
     "jest": "27.0.0",
-    "shielder-zk": "file:../shielder.js-core/pkg",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typedoc": "^0.22.15",
@@ -44,6 +43,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "esbuild-wasm": "0.17.19"
+    "esbuild-wasm": "0.17.19",
+    "shielder-zk": "^0.1.0"
   }
 }
