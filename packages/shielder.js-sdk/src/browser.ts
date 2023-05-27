@@ -1,5 +1,5 @@
 import init, {bar, 
-  // deposit as depositWasm, 
+  deposit as depositWasm, 
   // withdraw as withdrawWasm
   run_prover
 } from 'shielder-zk';
@@ -50,18 +50,21 @@ async function readAllChunks(readableStream: any) {
 async function deposit() {
   console.log('deposit');
 
+
+  console.log(JSON.stringify([[0,0], [0,1], [0,3]]));
+
   const res = await fetch('https://bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u.ipfs.w3s.link/ipfs/bafybeifjsmmivrq2hxmujww7t2t3prbu3r2vffh7bq7pf6su2v5qgmzd4u/deposit.pk.bytes')
   const chunks = (await readAllChunks(res.body));
   
-  // let sum = 0;
-  // const flatten: number[] = [];
+  let sum = 0;
+  const flatten: number[] = [];
 
-  // chunks.forEach(chunk => {
-  //   sum += chunk.length;
-  //   flatten.push(...chunk);
-  // });
+  chunks.forEach(chunk => {
+    sum += chunk.length;
+    flatten.push(...chunk);
+  });
 
-  // console.log(sum, flatten);
+  console.log(sum, flatten);
 
   const dep: Deposit = {
     deposit_id: 0,
@@ -71,11 +74,13 @@ async function deposit() {
 
   console.log('parsed deposit', JSON.stringify(dep))
   console.log('chunks json', JSON.stringify({
-    nested: chunks
+    nested: flatten
   }))
-  // const depositWasmResult = await depositWasm(JSON.stringify(dep), JSON.stringify(chunks));
+  const depositWasmResult = await depositWasm(JSON.stringify(dep), JSON.stringify({
+    nested: flatten
+  }));
 
-  // console.log({depositWasmResult})
+  console.log({depositWasmResult})
   console.log('finish deposit')
 }
 
