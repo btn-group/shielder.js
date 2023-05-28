@@ -37,7 +37,7 @@ async function deposit(args: Deposit) {
 
   console.log('[SDK_DEBUG] DEPOSIT_SDK_DATA:', JSON.stringify(args))
   const depositWasmResult = await depositWasm(JSON.stringify(args), JSON.stringify({
-    nested: flatten
+    nested: Array.from(flatten)
   }));
   
   console.log('[SDK_DEBUG] FINISH_DEPOSIT_SDK:', depositWasmResult);
@@ -55,9 +55,11 @@ async function withdraw(args: Withdraw) {
     return [...acc, ...curr]
   });
 
+  console.log('chunks', flatten.length);
+
   console.log('[SDK_DEBUG] WITHDRAW_SDK_DATA:', JSON.stringify(args));
   const withdrawWasmResult = await withdrawWasm(JSON.stringify(args), JSON.stringify({
-    nested: flatten
+    nested: Array.from(flatten)
   }));
   
   console.log('[SDK_DEBUG] FINISH_WITHDRAW_SDK:', withdrawWasmResult);
