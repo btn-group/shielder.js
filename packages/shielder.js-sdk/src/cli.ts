@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { bar } from './main'
+import { bar } from "./main";
 
 bar();

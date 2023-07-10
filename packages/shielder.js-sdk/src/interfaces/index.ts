@@ -5,11 +5,11 @@ export interface Deposit {
   trapdoor?: [number, number, number, number];
   nullifier?: [number, number, number, number];
   note?: [number, number, number, number];
-  proof?: string
+  proof?: string;
 }
 
 export interface Withdraw {
-  deposit: Deposit,
+  deposit: Deposit;
   withdraw_amount: number;
   fee: number;
   merkle_root: [number, number, number, number];
